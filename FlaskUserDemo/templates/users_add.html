@@ -3,7 +3,7 @@
 {% block title %}Sign Up{% endblock %}
 
 {% block content %}
-<form method="post">
+<form method="post" enctype="multipart/form-data">
     <label for="first_name">First Name:</label>
     <input id="first_name" name="first_name">
     <br>
@@ -15,6 +15,9 @@
     <br>
     <label for="password">Password:</label>
     <input id="password" name="password" type="password">
+    <br>
+    <label for="avatar">Profile picture:</label>
+    <input id="pic" name="avatar" type="file">
     <br>
     <input type="submit" value="Sign Up">
 </form>

@@ -8,7 +8,7 @@
 
 <p><a href="mailto:{{ result.email }}">{{ result.email }}</a></p>
 
-<img src="{{ url_for('static', filename=(result.avatar or 'images/default.png')) }}">
+<img src="{{ url_for('static', filename='images/' + (result.avatar or 'default.png')) }}">
 
 <p>
     <a href="/edit?id={{ result.id }}">Edit</a>

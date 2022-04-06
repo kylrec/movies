@@ -1,0 +1,26 @@
+{% extends '_layout.html'%}
+
+{% block title %}Edit User{% endblock %}
+
+{% block content %}
+
+<form method="post" enctype="multipart/form-data">
+    <input type="hidden" name="id" value="{{ result.id }}">
+    <label for="first_name">First Name:</label>
+    <input id="first_name" name="first_name" type="text" value="{{ result.first_name }}">
+    <br>
+    <label for="last_name">Last Name:</label>
+    <input id="last_name" name="last_name" type="text" value="{{ result.last_name }}">
+    <br>
+    <input id="email" name="email" type="email" value="{{ result.email }}">
+    <br>
+    <input id="password" name="password" type="password" value="{{ result.password }}">
+    <br>
+    <input id="pic" name="avatar" type="file" value="{{ result.avatar }}">
+    <br>
+
+    <input type="submit" value="Edit record">
+</form>
+
+
+{% endblock %}
