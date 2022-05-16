@@ -18,8 +18,7 @@
         <td>
             <a href="/view?id={{ row.id }}">View</a>
             <a href="/edit?id={{ row.id }}">Edit</a>
-            <a href="/delete?id={{ result.id }}" onclick="return confirm('Are you sure?')">Delete</a>
-            </p>
+            <a href="/delete?id={{ row.id }}" onclick="return confirm('Are you sure?')">Delete</a>
         </td>
     </tr>
     {% endfor %}
