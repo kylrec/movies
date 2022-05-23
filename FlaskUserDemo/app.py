@@ -1,6 +1,6 @@
 import uuid, os, hashlib, pymysql
 from flask import Flask, request, render_template, redirect, url_for, session, abort, flash, jsonify
-app = Flask(__name__)
+app = Flask(__name__) a
 
 # Register the setup page and import create_connection()
 from utils import create_connection, setup
