@@ -1,6 +1,6 @@
 import uuid, os, hashlib, pymysql
 from flask import Flask, request, render_template, redirect, url_for, session, abort, flash, jsonify
-app = Flask(__name__) a
+app = Flask(__name__) 
 
 # Register the setup page and import create_connection()
 from utils import create_connection, setup
@@ -42,7 +42,7 @@ def login():
                 session['logged_in'] = True
                 session['first_name'] = result['first_name']
                 session['role'] = result['role']
-                session['id'] = result['id']
+                #session['id'] = result['id']
                 return redirect('/dashboard')
             else:
                 flash("Invalid username or password.")
@@ -103,7 +103,7 @@ def add_user():
                 session['logged_in'] = True
                 session['first_name'] = result['first_name']
                 session['role'] = result['role']
-                session['id'] = result['id']
+                #session['id'] = result['id']
                 return redirect('/')
 
     return render_template('users_add.html')
@@ -119,6 +119,14 @@ def list_users():
             cursor.execute("SELECT * FROM users")
             result = cursor.fetchall()
     return render_template('users_list.html', result=result)
+
+@app.route('/movies')
+def movies():
+    with create_connection() as connection:
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT * FROM movies")
+            result = cursor.fetchall()
+    return render_template('movies.html', result=result)
 
 # TODO: Add a '/profile' (view_user) route that uses SELECT
 @app.route('/view')

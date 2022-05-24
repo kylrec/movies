@@ -1,0 +1,18 @@
+{% extends '_layout.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<table>
+    <tr>
+        <th>Title</th>
+    </tr>
+    {% for row in result %}
+    <tr>
+        <td>{{ row.title }}</td>
+    </tr>
+
+    {% endfor %}
+</table>
+{% endblock %}
+
