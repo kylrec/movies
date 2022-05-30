@@ -5,6 +5,8 @@
 {% block content %}
 <a href="{{ url_for('add_user') }}">Sign Up</a>
 <br>
+<a href="{{ url_for('list_movies') }}">Movies</a>
+<br>
 {% if session['role'] == 'admin' %} 
 <a href="{{ url_for('list_users') }}">View All Users</a>
 {% elif 'logged_in' in session %}

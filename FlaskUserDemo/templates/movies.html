@@ -6,10 +6,15 @@
 <table>
     <tr>
         <th>Title</th>
+        <th>Genre</th>
+        <th>Year Released</th>
     </tr>
     {% for row in result %}
     <tr>
         <td>{{ row.title }}</td>
+        <td>{{ row.genre }}</td>
+        <td>{{ row.year_released }}</td>
+        <td><a href="/edit?id={{ row.user_id }}">Edit</a></td>
     </tr>
 
     {% endfor %}

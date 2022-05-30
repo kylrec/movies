@@ -1,22 +1,22 @@
 import uuid, os, hashlib, pymysql
 from flask import Flask, request, render_template, redirect, url_for, session, abort, flash, jsonify
-app = Flask(__name__) 
+app = Flask(__name__)
 
 # Register the setup page and import create_connection()
 from utils import create_connection, setup
 app.register_blueprint(setup)
 
-@app.before_request
-def restrict():
-    restricted_pages = [
-        'list_users',
-        'view_user',
-        'edit_user',
-        'delete_user'
-        ]
-    if 'logged_in' not in session and request.endpoint in restricted_pages:
-        flash("You are not logged in.")
-        return redirect('/login')
+#@app.before_request
+#def restrict():
+#    restricted_pages = [
+#        'list_users',
+#        'view_user',
+#        'edit_user',
+#        'delete_user'
+#        ]
+#    if 'logged_in' not in session and request.endpoint in restricted_pages:
+#        flash("You are not logged in.")
+#        return redirect('/login')
 
 @app.route('/')
 def home():
@@ -42,7 +42,7 @@ def login():
                 session['logged_in'] = True
                 session['first_name'] = result['first_name']
                 session['role'] = result['role']
-                #session['id'] = result['id']
+                session['id'] = result['user_id']
                 return redirect('/dashboard')
             else:
                 flash("Invalid username or password.")
@@ -91,7 +91,6 @@ def add_user():
                     flash('Email has already been taken.')
                     return redirect('/register')
 
-
                 sql = "SELECT * FROM users WHERE email = %s AND password = %s"
                 values = (
                     request.form['email'],
@@ -103,7 +102,7 @@ def add_user():
                 session['logged_in'] = True
                 session['first_name'] = result['first_name']
                 session['role'] = result['role']
-                #session['id'] = result['id']
+                session['id'] = result['user_id']
                 return redirect('/')
 
     return render_template('users_add.html')
@@ -120,8 +119,9 @@ def list_users():
             result = cursor.fetchall()
     return render_template('users_list.html', result=result)
 
-@app.route('/movies')
-def movies():
+
+@app.route ('/movies')
+def list_movies():
     with create_connection() as connection:
         with connection.cursor() as cursor:
             cursor.execute("SELECT * FROM movies")
@@ -133,7 +133,7 @@ def movies():
 def view_user():
     with create_connection() as connection:
         with connection.cursor() as cursor:
-            cursor.execute("SELECT * FROM users WHERE id = %s", request.args['id'])
+            cursor.execute("SELECT * FROM users WHERE user_id = %s", request.args['id'])
             result = cursor.fetchone()
     return render_template('users_view.html', result=result)
 
@@ -145,7 +145,7 @@ def delete_user():
         return redirect('/view?id=' + request.args['id'])
     with create_connection() as connection:
             with connection.cursor() as cursor:
-                sql = """DELETE FROM users WHERE id = %s"""
+                sql = """DELETE FROM users WHERE user_id = %s"""
                 values = (request.args['id'])
                 cursor.execute(sql, values)
                 connection.commit()
@@ -180,14 +180,14 @@ def edit_user():
                     email = %s,
                     password = %s,
                     avatar = %s
-                    WHERE id = %s"""
+                    WHERE user_id = %s"""
                     values = (
                         request.form['first_name'], 
                         request.form['last_name'], 
                         request.form['email'],
                         encrypted_password,
                         avatar_filename,
-                        request.form['id']
+                        request.form['user_id']
                     )
 
                 else:
@@ -196,13 +196,13 @@ def edit_user():
                     last_name = %s,
                     email = %s,
                     avatar = %s
-                    WHERE id = %s"""
+                    WHERE user_id = %s"""
                     values = (
                         request.form['first_name'], 
                         request.form['last_name'], 
                         request.form['email'],
                         avatar_filename,
-                        request.form['id']
+                        request.form['user_id']
                         )
                 cursor.execute(sql, values)
                 connection.commit()
@@ -211,7 +211,7 @@ def edit_user():
     else:
         with create_connection() as connection:
             with connection.cursor() as cursor:
-                sql = "SELECT * FROM users WHERE id = %s"
+                sql = "SELECT * FROM users WHERE user_id = %s"
                 values = (request.args['id'])
                 cursor.execute(sql, values)
                 result = cursor.fetchone()
