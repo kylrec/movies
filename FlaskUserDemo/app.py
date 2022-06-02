@@ -144,7 +144,6 @@ def watch_movie():
                 connection.commit()
     return redirect('/watched_movie?user_id=' + str(session['user_id']))
 
-
 @app.route('/watched_movie')
 def watched_movies():
     with create_connection() as connection:
@@ -159,6 +158,16 @@ def watched_movies():
             cursor.execute(sql, values)
             result = cursor.fetchall()
     return render_template('movies_watched.html', result=result)
+
+app.route ('/deletemov')
+def delete_movie():
+    with create_connection() as connection:
+            with connection.cursor() as cursor:
+                sql = """DELETE FROM users_movies WHERE movie_id = %s"""
+                values = (request.args['id'])
+                cursor.execute(sql, values)
+                connection.commit()
+    return redirect (''/watched_movie?user_id=' + str(session['user_id'])')
 
    
 # TODO: Add a '/profile' (view_user) route that uses SELECT
