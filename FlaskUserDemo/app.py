@@ -42,13 +42,13 @@ def login():
                 session['logged_in'] = True
                 session['first_name'] = result['first_name']
                 session['role'] = result['role']
-                session['id'] = result['user_id']
-                return redirect('/dashboard')
+                session['user_id'] = result['user_id']
+                return redirect('/')
             else:
                 flash("Invalid username or password.")
                 return redirect('/login')
     else:
-        return render_template("login.html")
+        return render_template ('login.html')
 
 @app.route('/logout')
 def logout():
@@ -102,7 +102,7 @@ def add_user():
                 session['logged_in'] = True
                 session['first_name'] = result['first_name']
                 session['role'] = result['role']
-                session['id'] = result['user_id']
+                session['user_id'] = result['user_id']
                 return redirect('/')
 
     return render_template('users_add.html')
@@ -128,6 +128,39 @@ def list_movies():
             result = cursor.fetchall()
     return render_template('movies.html', result=result)
 
+@app.route ('/addmov')
+def watch_movie():
+    with create_connection() as connection:
+            with connection.cursor() as cursor:
+                sql = """INSERT INTO users_movies
+                    (user_id, movie_id)
+                    VALUES (%s, %s)
+                """
+                values = (
+                    session['user_id'],
+                    request.args["movie_id"]
+                )
+                cursor.execute(sql, values)
+                connection.commit()
+    return redirect('/watched_movie?user_id=' + str(session['user_id']))
+
+
+@app.route('/watched_movie')
+def watched_movies():
+    with create_connection() as connection:
+        with connection.cursor() as cursor:
+            sql = """SELECT * FROM users
+                     JOIN users_movies ON users_movies.user_id = users.user_id
+                     JOIN movies ON movies.movie_id = users_movies.movie_id 
+                     WHERE users.user_id = %s"""
+            values = (
+                request.args['id']
+                )
+            cursor.execute(sql, values)
+            result = cursor.fetchall()
+    return render_template('movies_watched.html', result=result)
+
+   
 # TODO: Add a '/profile' (view_user) route that uses SELECT
 @app.route('/view')
 def view_user():
@@ -150,6 +183,7 @@ def delete_user():
                 cursor.execute(sql, values)
                 connection.commit()
     return redirect ('/dashboard')
+
 # TODO: Add an '/edit_user' route that uses UPDATE
 @app.route('/edit', methods=['GET', 'POST'])
 def edit_user():

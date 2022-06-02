@@ -5,11 +5,13 @@
 {% block content %}
 <a href="{{ url_for('add_user') }}">Sign Up</a>
 <br>
-<a href="{{ url_for('list_movies') }}">Movies</a>
+<a href="{{ url_for('list_movies') }}">View all movies</a>
 <br>
 {% if session['role'] == 'admin' %} 
 <a href="{{ url_for('list_users') }}">View All Users</a>
 {% elif 'logged_in' in session %}
-<a href="{{ url_for('view_user', id=session['id']) }}">View your account</a>
+<a href="{{ url_for('view_user', id=session['user_id']) }}">View your account</a>
+<br>
+<a href="{{ url_for('watched_movies', id=session['user_id']) }}">View your watched movies</a>
 {% endif %}
 {% endblock %}

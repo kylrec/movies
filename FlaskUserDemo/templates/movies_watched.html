@@ -1,6 +1,6 @@
 {% extends '_layout.html' %}
 
-{% block title %}Home{% endblock %}
+{% block title %}Watched Movies{% endblock %}
 
 {% block content %}
 <table>
@@ -14,7 +14,6 @@
         <td>{{ row.title }}</td>
         <td>{{ row.genre }}</td>
         <td>{{ row.year_released }}</td>
-        <td><a href="/addmov?movie_id={{ row.movie_id }}">Watched</a></td>
     </tr>
 
     {% endfor %}

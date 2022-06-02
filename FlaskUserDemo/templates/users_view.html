@@ -16,6 +16,8 @@
 </p>
 <p>
     <a href="{{ url_for('list_users') }}">Back to dashboard</a>
+    <br>
+    <a href="{{ url_for('watched_movies', id=session['user_id']) }}">View your watched movies</a>
 </p>
 
 {% endblock %}
